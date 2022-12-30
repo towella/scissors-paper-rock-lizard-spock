@@ -1,0 +1,3 @@
+o pause when screen is inactive - pygame.display.get_active()
+o options in pause menu
+o fullscreen option in pause menu - pygame.display.toggle_fullscreen()
