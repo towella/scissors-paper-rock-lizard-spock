@@ -22,7 +22,7 @@ game_speed = 20
 # placed on and then resized to blit on the window. Allowing larger pixels (art pixel = game pixel)
 # https://stackoverflow.com/questions/54040397/pygame-rescale-pixel-size
 
-scaling_factor = 2.4  # how much the screen is scaled up before bliting on display
+scaling_factor = 2  # how much the screen is scaled up before bliting on display
 
 # https://www.pygame.org/docs/ref/display.html#pygame.display.set_mode
 # https://www.reddit.com/r/pygame/comments/r943bn/game_stuttering/
@@ -50,7 +50,7 @@ def main_menu():
 
 def game():
     click = False
-    type_numbers = {'scissors': 10, 'paper': 10, 'rock': 10}
+    type_numbers = {'scissors': 10, 'paper': 10, 'rock': 10, 'spock': 10, 'lizard': 10}
 
     level = Level(screen, screen_rect, type_numbers)
 

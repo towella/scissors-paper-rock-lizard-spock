@@ -48,7 +48,9 @@ class Level:
     def create_tile_group(self):
         sprite_group = pygame.sprite.Group()
         path = '../assets/'
-        surfaces = {'scissors': pygame.image.load(resource_path(path + 'scissors.png')),
+        surfaces = {'spock': pygame.image.load(resource_path(path + 'spock.png')),
+                    'lizard': pygame.image.load(resource_path(path + 'lizard.png')),
+                    'scissors': pygame.image.load(resource_path(path + 'scissors.png')),
                     'paper': pygame.image.load(resource_path(path + 'paper.png')),
                     'rock': pygame.image.load(resource_path(path + 'rock.png'))}
 
@@ -139,7 +141,7 @@ class Level:
     def pause_menu(self):
         pause_surf = pygame.Surface((self.screen_surface.get_width(), self.screen_surface.get_height()))
         pause_surf.fill((40, 40, 40))
-        self.screen_surface.blit(pause_surf, (0, 0), special_flags=pygame.BLEND_RGB_SUB)
+        self.screen_surface.blit(pause_surf, (0, 0), special_flags=pygame.BLEND_RGB_ADD)
         width = self.large_font.width('PAUSED')
         self.large_font.render('PAUSED', self.screen_surface, (center_object_x_surf(width, self.screen_surface), 20), 'black')
 

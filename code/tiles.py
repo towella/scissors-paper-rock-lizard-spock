@@ -24,8 +24,15 @@ class CollideableTile(StaticTile):
         super().__init__(pos, size, screen)  # passing in variables to parent class
 
         self.GAME_RULES = {('scissors', 'paper'): 'scissors',
+                           ('scissors', 'lizard'): 'scissors',
                            ('paper', 'rock'): 'paper',
-                           ('rock', 'scissors'): 'rock'}
+                           ("paper", 'spock'): 'paper',
+                           ('rock', 'scissors'): 'rock',
+                           ('rock', 'lizard'): 'rock',
+                           ('lizard', 'paper'): 'lizard',
+                           ('lizard', 'spock'): 'lizard',
+                           ('spock', 'scissors'): 'spock',
+                           ('spock', 'rock'): 'spock'}
 
         self.type = type
         self.surfaces = surfaces
@@ -34,8 +41,14 @@ class CollideableTile(StaticTile):
         self.hitbox.topleft = pos
         self.move_speed = 1
         self.randdir_timer_max = 20
-        self.randdir_timer = self.randdir_timer_max
+        self.randdir_timer = random.randint(0, self.randdir_timer_max)
         self.velocity = [0, 0]
+
+        choices = [-self.move_speed, self.move_speed]
+        self.velocity[0] = random.choice(choices)
+        self.velocity[1] = random.choice(choices)
+        self.hitbox.x += self.velocity[0]
+        self.hitbox.y += self.velocity[1]
 
     def check_collision(self, entities):
         # check collision with other entities
@@ -49,15 +62,19 @@ class CollideableTile(StaticTile):
     def update_image(self):
         self.image = self.surfaces[self.type]
 
+    def move(self):
+        choices = [-self.move_speed, self.move_speed]
+        self.velocity[0] = random.choice(choices)
+        self.velocity[1] = random.choice(choices)
+        self.randdir_timer = 0
+
+
     def update(self, entities):
         self.check_collision(entities)
         self.update_image()
 
         if self.randdir_timer == self.randdir_timer_max:
-            choices = [-self.move_speed, self.move_speed]
-            self.velocity[0] = random.choice(choices)
-            self.velocity[1] = random.choice(choices)
-            self.randdir_timer = 0
+            self.move()
 
         self.hitbox.x += self.velocity[0]
         self.hitbox.y += self.velocity[1]
