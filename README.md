@@ -25,4 +25,5 @@ Controls
 |------------|------------|
 | F          | Fullscreen |
 | R          | Reset      |
+| P          | Pause      |
 | ',' or ESC | Quit       |

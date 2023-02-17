@@ -2,7 +2,7 @@
 import pygame
 import random
 # - general -
-from game_data import fonts
+from game_data import fonts, start_num
 from support import *
 # - tiles -
 from tiles import CollideableTile
@@ -22,6 +22,7 @@ class Level:
 
         self.type_numbers = type_numbers
         self.entities = self.create_tile_group()
+        self.won = None
 
         self.pause = False
         self.pause_pressed = False
@@ -124,6 +125,9 @@ class Level:
         elif keys[pygame.K_z]:
             self.dev_debug = True'''
 
+    def get_won(self):
+        return self.won
+
 # -- visual --
 
     # draw tiles in tile group but only if in camera view (in tile.draw method)
@@ -141,7 +145,7 @@ class Level:
     def pause_menu(self):
         pause_surf = pygame.Surface((self.screen_surface.get_width(), self.screen_surface.get_height()))
         pause_surf.fill((40, 40, 40))
-        self.screen_surface.blit(pause_surf, (0, 0), special_flags=pygame.BLEND_RGB_ADD)
+        self.screen_surface.blit(pause_surf, (0, 0), special_flags=pygame.BLEND_RGB_SUB)
         width = self.large_font.width('PAUSED')
         self.large_font.render('PAUSED', self.screen_surface, (center_object_x_surf(width, self.screen_surface), 20), 'black')
 
@@ -163,6 +167,15 @@ class Level:
 
             self.level_timer += 1
 
+            # CHECK IF GAME OVER
+            types = {'scissors': 0, 'paper': 0, 'rock': 0, 'lizard': 0, 'spock': 0}
+            for obj in self.entities:
+                types[obj.type] += 1
+
+            for type in types:
+                if types[type] == start_num * 5:
+                    self.won = type
+                    break
 
         # -- RENDER --
         # Draw

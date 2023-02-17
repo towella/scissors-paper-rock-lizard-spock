@@ -7,7 +7,7 @@ import pygame, sys
 from level import Level
 from text import Font
 from game_data import *
-from support import resource_path
+from support import resource_path, center_object_x_surf
 
 # General setup
 pygame.mixer.pre_init(44100, 16, 2, 4096)
@@ -41,18 +41,90 @@ pygame.display.set_caption('Scissors Paper Rock Simulation - Andrew Towell')
 pygame.display.set_icon(pygame.image.load(resource_path('../icon/app_icon.png')))
 
 # font
-font = Font(fonts['small_font'], 'white')
+large_font = Font(fonts['large_font'], 'white')
+font = Font(fonts['small_font'], 'black')
 
 
 def main_menu():
     game()
 
 
+def win_screen(winner, points):
+    # imports
+    path = '../assets/'
+    surfaces = {'spock': pygame.image.load(resource_path(path + 'spock.png')),
+                'lizard': pygame.image.load(resource_path(path + 'lizard.png')),
+                'scissors': pygame.image.load(resource_path(path + 'scissors.png')),
+                'paper': pygame.image.load(resource_path(path + 'paper.png')),
+                'rock': pygame.image.load(resource_path(path + 'rock.png'))}
+    bg = pygame.image.load(resource_path('../assets/win.png'))
+
+    # surface
+    surf = pygame.Surface(screen_rect.size)
+
+    # draw to surface
+    surf.blit(bg, (0, 0))
+    title = large_font.get_surf("WINNER", True)
+    scale_f = 2
+    title = pygame.transform.scale(title, (title.get_width() * scale_f, title.get_height() * scale_f))
+    surf.blit(title, (center_object_x_surf(title.get_width(), surf), 40))
+
+    scale_f = 4
+    icon = pygame.transform.scale(surfaces[winner], (surfaces[winner].get_width() * scale_f, surfaces[winner].get_height() * scale_f))
+    surf.blit(icon, (center_object_x_surf(icon.get_width(), surf), 100))
+
+    y = 200
+    y_increment = 22
+    icon_offset = 8
+    icon_v_offset = 5
+    icon_width = surfaces['rock'].get_width()
+
+    text = font.get_surf(f"Scissors: {points['scissors']}")
+    x = center_object_x_surf(text.get_width() + icon_width + icon_offset, surf)
+    surf.blit(text, (x + icon_width + icon_offset, y))
+    surf.blit(surfaces['scissors'], (x, y - icon_v_offset))
+
+    y += y_increment
+    text = font.get_surf(f"Papers: {points['paper']}")
+    x = center_object_x_surf(text.get_width() + icon_width + icon_offset, surf)
+    surf.blit(text, (x + icon_width + icon_offset, y))
+    surf.blit(surfaces['paper'], (x, y - icon_v_offset))
+
+    y += y_increment
+    text = font.get_surf(f"Rocks: {points['rock']}")
+    x = center_object_x_surf(text.get_width() + icon_width + icon_offset, surf)
+    surf.blit(text, (x + icon_width + icon_offset, y))
+    surf.blit(surfaces['rock'], (x, y - icon_v_offset))
+
+    y += y_increment
+    text = font.get_surf(f"Lizards: {points['lizard']}")
+    x = center_object_x_surf(text.get_width() + icon_width + icon_offset, surf)
+    surf.blit(text, (x + icon_width + icon_offset, y))
+    surf.blit(surfaces['lizard'], (x, y - icon_v_offset))
+
+    y += y_increment
+    text = font.get_surf(f"Spocks: {points['spock']}")
+    x = center_object_x_surf(text.get_width() + icon_width + icon_offset, surf)
+    surf.blit(text, (x + icon_width + icon_offset, y))
+    surf.blit(surfaces['spock'], (x, y - icon_v_offset))
+
+    return surf.convert(24)
+
+
 def game():
     click = False
-    type_numbers = {'scissors': 10, 'paper': 10, 'rock': 10, 'spock': 10, 'lizard': 10}
+    type_numbers = {'scissors': start_num, 'paper': start_num, 'rock': start_num, 'spock': start_num, 'lizard': start_num}
+    points = {'scissors': 0, 'paper': 0, 'rock': 0, 'spock': 0, 'lizard': 0}
+
+    # timers
+    timer = 9999
+    finish_max_t = 20
+    win_max_t = 100
+    win_alpha = 0
+    reveal_win = 30
 
     level = Level(screen, screen_rect, type_numbers)
+    end_level = False
 
     running = True
     while running:
@@ -88,10 +160,30 @@ def game():
                     click = True
 
         # -- Update --
+        if level.get_won() is not None and not end_level:
+            end_level = True
+            points[level.get_won()] += 1
+            timer = 0
+        # if splash screen is over, reset game
+        if end_level and timer > win_max_t:
+            level = Level(screen, screen_rect, type_numbers)
+            end_level = False
+            win_alpha = 0
+
         screen.fill((237, 238, 192))
         level.update()  # runs level processes
 
+        if end_level and timer > finish_max_t:
+            surf = win_screen('lizard', points)
+            win_alpha += reveal_win
+            if win_alpha > 255:
+                win_alpha = 255
+            surf.set_alpha(win_alpha)
+            screen.blit(surf, (0, 0))
+
         window.blit(pygame.transform.scale(screen, window.get_rect().size), (0, 0))  # scale screen to window
+
+        timer += 1
 
         # -- Render --
         pygame.display.update()

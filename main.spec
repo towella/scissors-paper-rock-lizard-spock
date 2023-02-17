@@ -28,7 +28,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [('v', None, 'OPTION')],
-    name='main',
+    name='Scissors Paper Rock Lizard Spock',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -44,7 +44,7 @@ exe = EXE(
 )
 app = BUNDLE(
     exe,
-    name='Scissors Paper Rock Simulation.app',
+    name='Scissors Paper Rock Lizard Spock.app',
     icon='icon/app_icon.icns',
     bundle_identifier=None,
 )

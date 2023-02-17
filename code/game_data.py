@@ -1,6 +1,8 @@
 tile_size = 16  # keep to prevent errors, even if game doesnt need tiles
 screen_width = 20 * tile_size  # arbitrary
 screen_height = 20 * tile_size  # arbitrary
+points_border = 0
+start_num = 10
 
 controller_map = {'square': 0, 'X': 1, 'circle': 2, 'triangle': 3, 'L1': 4, 'R1': 5, 'L2': 6, 'R2': 7, 'share': 8,
                   'options': 9, 'left_analog_press': 10, 'right_analog_press': 11, 'PS': 12, 'touchpad': 13,

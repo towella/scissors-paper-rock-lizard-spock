@@ -1,6 +1,7 @@
 import pygame
 from support import import_folder
 import random
+from game_data import points_border
 
 
 # base tile class with block fill image
@@ -50,6 +51,8 @@ class CollideableTile(StaticTile):
         self.hitbox.x += self.velocity[0]
         self.hitbox.y += self.velocity[1]
 
+        self.points_border = points_border
+
     def check_collision(self, entities):
         # check collision with other entities
         for obj in entities:
@@ -86,8 +89,8 @@ class CollideableTile(StaticTile):
 
         if self.hitbox.top < 0:
             self.hitbox.top = 0
-        elif self.hitbox.bottom > self.screen_height:
-            self.hitbox.bottom = self.screen_height
+        elif self.hitbox.bottom > self.screen_height - self.points_border:
+            self.hitbox.bottom = self.screen_height - self.points_border
 
         self.rect.topleft = self.hitbox.topleft
 
