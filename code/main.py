@@ -174,7 +174,7 @@ def game():
         level.update()  # runs level processes
 
         if end_level and timer > finish_max_t:
-            surf = win_screen('lizard', points)
+            surf = win_screen(level.get_won(), points)
             win_alpha += reveal_win
             if win_alpha > 255:
                 win_alpha = 255

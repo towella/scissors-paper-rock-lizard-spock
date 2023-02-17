@@ -2,7 +2,7 @@
 
 Scissors Paper Rock simulation coding challenge made with pygame  
 Copyright 2023 Andrew Towell  
-Version: 1.0.1
+Version: 1.1.0
 
 Open App Instructions (mac only)
 - Right click on application
@@ -25,5 +25,5 @@ Controls
 |------------|------------|
 | F          | Fullscreen |
 | R          | Reset      |
-| P          | Pause      |
+| P or SPACE | Pause      |
 | ',' or ESC | Quit       |
